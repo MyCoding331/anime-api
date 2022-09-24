@@ -9,9 +9,13 @@ app.use(cors());
 
 const baseURL = "https://gogoanime.ai/";
 
-app.get("/api/home", (req, res) => {
+
+
+
+app.get("/", (req, res) => {
   let info = {
     popular: "https://anime-x.vercel.app/api/popular/:page",
+    movies: "https://anime-x.vercel.app/api/movies/:page",
     details: "https://anime-x.vercel.app/api/details/:id",
     search: "https://anime-x.vercel.app/api/search/:word/:page",
     episode_link: "https://anime-x.vercel.app/api/watching/:id/:episode",
@@ -73,6 +77,8 @@ app.get("/api/movies/:page", (req, res) => {
   });
 });
 
+
+
 app.get("/api/details/:id", (req, res) => {
   let results = [];
 
@@ -89,7 +95,7 @@ app.get("/api/details/:id", (req, res) => {
         var Othername = "";
         var title = $(".anime_info_body_bg").children("h1").text();
         var image = $(".anime_info_body_bg").children("img").attr().src;
-
+        var id = $(".anime_info_body_bg").children("img").attr("src").slice(26,-4); 
         $("p.type").each(function (index, element) {
           if ("Type: " == $(this).children("span").text()) {
             type = $(this).text().slice(15, -5);
@@ -115,6 +121,7 @@ app.get("/api/details/:id", (req, res) => {
           .children("a")
           .attr().ep_end;
         results[0] = {
+          id,
           title,
           image,
           type,
@@ -132,6 +139,7 @@ app.get("/api/details/:id", (req, res) => {
     }
   });
 });
+
 
 app.get("/api/search/:word/:page", (req, res) => {
   let results = [];
