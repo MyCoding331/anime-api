@@ -188,7 +188,8 @@ app.get("/api/watching/:id/:episode", (req, res) => {
   let link = "";
   let results = [];
   let nl = [];
-  var totalepisode = [];
+  
+  var title =[]
   var id = req.params.id;
   var episode = req.params.episode;
   url = `${baseURL + id}-episode-${episode}`;
@@ -203,13 +204,9 @@ app.get("/api/watching/:id/:episode", (req, res) => {
             .json({ links: [], link, totalepisode: totalepisode });
         }
 
-        totalepisode = $("#episode_page")
-          .children("li")
-          .last()
-          .children("a")
-          .text()
-          .split("-");
-        totalepisode = totalepisode[totalepisode.length - 1];
+       
+        
+        title =$(".anime_video_body").children("h1").text().slice(0,-12);
         link = $("li.anime").children("a").attr("data-video");
         const cl = "http:" + link.replace("streaming.php", "download");
         rs(cl, (err, resp, html) => {
@@ -228,7 +225,7 @@ app.get("/api/watching/:id/:episode", (req, res) => {
                     size: li == "HDP" ? "High Speed" : li,
                   });
                 }
-                  results = [{ link,  totalepisode }];
+                  results = [{ link,  title }];
               });
               return res
                 .status(200)
@@ -243,7 +240,7 @@ app.get("/api/watching/:id/:episode", (req, res) => {
       } catch (e) {
         return res
           .status(404)
-          .json({ links: [], link: "", totalepisode: totalepisode });
+          .json({  link: "", title });
       }
     }
   });
