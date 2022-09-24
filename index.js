@@ -228,7 +228,7 @@ app.get("/api/watching/:id/:episode", (req, res) => {
                     size: li == "HDP" ? "High Speed" : li,
                   });
                 }
-                  results = { link,  totalepisode };
+                  results = [{ link,  totalepisode }];
               });
               return res
                 .status(200)
