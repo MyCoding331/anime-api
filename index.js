@@ -186,6 +186,7 @@ async function getLink(Link) {
 
 app.get("/api/watching/:id/:episode", (req, res) => {
   let link = "";
+  let results = [];
   let nl = [];
   var totalepisode = [];
   var id = req.params.id;
@@ -227,14 +228,15 @@ app.get("/api/watching/:id/:episode", (req, res) => {
                     size: li == "HDP" ? "High Speed" : li,
                   });
                 }
+                  results = { link,  totalepisode };
               });
               return res
                 .status(200)
-                .json({ links: nl, link, totalepisode: totalepisode });
+                .json({results});
             } catch (e) {
               return res
                 .status(200)
-                .json({ links: nl, link, totalepisode: totalepisode });
+                .json({results});
             }
           }
         });
