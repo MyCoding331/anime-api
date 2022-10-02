@@ -1,5 +1,5 @@
 const app = require("express")();
-const { v4 } = require("uuid");
+// const { v4 } = require("uuid");
 const cheerio = require("cheerio");
 const cors = require("cors");
 const rs = require("request");
@@ -95,7 +95,7 @@ app.get("/api/details/:id", (req, res) => {
         var Othername = "";
         var title = $(".anime_info_body_bg").children("h1").text();
         var image = $(".anime_info_body_bg").children("img").attr().src;
-        var id = $(".anime_info_body_bg").children("img").attr("src").slice(26,-4); 
+        var id = $(".anime_info_body_bg").children("h1").text(); 
         $("p.type").each(function (index, element) {
           if ("Type: " == $(this).children("span").text()) {
             type = $(this).text().slice(15, -5);
@@ -109,12 +109,14 @@ app.get("/api/details/:id", (req, res) => {
             genres = $(this).text().slice(20, -4);
             genres = genres.split(",");
             genres = genres.join(",");
+            
           } else "Other name: " == $(this).children("span").text();
           {
             Othername = $(this).text().slice(12);
           }
         });
         genres.replace(" ");
+       
         var totalepisode = $("#episode_page")
           .children("li")
           .last()
@@ -360,6 +362,31 @@ app.get("/api/list/:variable/:page", (req, res) => {
           });
 
         res.status(200).json({ list });
+      } catch (e) {
+        res.status(404).json({ e: "404 fuck off!!!!!" });
+      }
+    }
+  });
+});
+app.get("/api/anime/ep/:id", (req, res) => {
+  let results = [];
+  let page = req.params.page;
+  if (isNaN(page)) {
+    return res.status(404).json({ results });
+  }
+  url = `${baseURL}category/${req.params.id}`;
+  rs(url, (error, response, html) => {
+    if (!error) {
+      try {
+        var $ = cheerio.load(html);
+        $("#episode_related > li > a").each(function (index, element) {
+          let title = $(this).children("a").attr().title;
+          let id = $(this).attr().href.slice(10);
+          let image = $(this).children("a").children("img").attr().src;
+
+          results[index] = { title, id, image };
+        });
+        res.status(200).json({ results });
       } catch (e) {
         res.status(404).json({ e: "404 fuck off!!!!!" });
       }
