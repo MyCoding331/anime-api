@@ -104,7 +104,7 @@ app.get("/api/details/:id", (req, res) => {
           } else if ("Released: " == $(this).children("span").text()) {
             relased = $(this).text().slice(10);
           } else if ("Status: " == $(this).children("span").text()) {
-            status = $(this).text().slice(38,-15);
+            status = $(this).text().slice(43,-25);
           } else if ("Genre: " == $(this).children("span").text()) {
             genres = $(this).text().slice(20, -4);
             genres = genres.split(",");
